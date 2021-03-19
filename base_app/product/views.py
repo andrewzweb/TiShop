@@ -1,3 +1,6 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def home(request):
+    greatings = 'Hello you are at home'
+    return render(request, 'product/home.html', locals()) 
