@@ -6,10 +6,18 @@
 pip install -r deploy/requirements.txt
 ```
 
-after You should run tets
+## Testing 
+
+After install requirements You should run tets.
 
 ```
-pytest
+cd base_app
+pytest 
 ```
 
-If all fine go to work.
+And also need check functional test
+
+```
+python manage.py test functional_tests.start
+``
+
