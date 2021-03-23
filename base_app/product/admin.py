@@ -19,11 +19,12 @@ class ProductAdmin(admin.ModelAdmin):
         'view_name_and_price',
         'title',
         'price',
+        'category',
         'updated',
         'created')
     list_editable = ('title', 'price')
     search_fields = ('title', 'description')
-    list_filter = ('updated', 'created')
+    list_filter = ('category', 'updated', 'created')
 
     def view_name_and_price(self, obj):
         ''' view name and price in one field '''
@@ -34,3 +35,9 @@ class ProductAdmin(admin.ModelAdmin):
 class ProductImageAdmin(admin.ModelAdmin):
     ''' product image '''
     list_display = ('description','small_image')
+
+
+@admin.register(models.Category)
+class CategoryAdmin(admin.ModelAdmin):
+    ''' category '''
+    list_display = ('title',)

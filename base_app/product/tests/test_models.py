@@ -64,7 +64,7 @@ class TestProduct:
 
 
 class TestProductImage:
-    ''' test product image '''
+    ''' testcase product image '''
 
     def setup(self):
         ''' setup '''
@@ -72,19 +72,70 @@ class TestProductImage:
         self.product_image = mixer.blend('product.ProductImage', product=self.product)
 
     def test_exist_product_image(self):
+        '''test exist product image'''
         assert ProductImage.objects.count() == 1
 
     def test_obj_have_description(self):
+        '''test obj have description'''
         assert self.product_image.description
 
     def test_obj_have_image(self):
+        '''test obj have image'''
         assert self.product_image.image
 
     def test_obj_have_ralation_with_product(self):
+        '''test obj have ralation with product'''
         assert self.product_image.product == self.product
 
     def test_obj_str_return_title(self):
+        '''test obj str return title'''
         assert str(self.product_image) == self.product_image.description
 
     def test_obj_small_image(self):
+        '''test obj small image'''
         assert self.product_image.image.url in  self.product_image.small_image()
+
+
+class TestCategory:
+    ''' testcase category'''
+
+    def setup(self):
+        self.product = mixer.blend('product.Product')
+        self.category = mixer.blend('product.Category', product=self.product)
+    
+    def test_category_exist(self):
+        ''' test category '''
+        assert self.category
+
+    def test_category_have_title(self):
+        '''test category have title'''
+        assert self.category.title
+
+    def test_category_have_slug(self):
+        '''test category have slug'''
+        assert self.category.slug
+
+    def test_category_method_str(self):
+        '''test category have slug'''
+        assert self.category.title in str(self.category)
+
+    def test_method_save_autochange_slug(self):
+        '''test category have slug'''
+
+        # get title
+        title = self.category.title
+        # check slug it ccover title
+        assert str(slugify(title)) == self.category.slug
+
+        # set new title
+        new_title = 'New title'
+        self.category.title = new_title
+
+        # check new title not even slug
+        assert str(slugify(new_title)) != str(self.category.slug)
+
+        # action save instance
+        self.category.save()
+
+        # check slug must be same with title
+        assert str(slugify(new_title)) == str(self.category.slug)

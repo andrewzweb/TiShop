@@ -16,6 +16,12 @@ class Product(models.Model):
         decimal_places=2,
         blank=True
      )
+    category = models.ForeignKey(
+        'Category',
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True
+    )
 
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -47,3 +53,15 @@ class ProductImage(models.Model):
 
     small_image.short_description = 'Picture'
     small_image.allow_tags = True
+
+
+class Category(models.Model):
+    title = models.CharField(blank=False, max_length=100)
+    slug = models.SlugField(null=True, blank=True)
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Category, self).save(*args, **kwargs)
