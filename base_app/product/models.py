@@ -25,3 +25,6 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super(Product, self).save(*args, **kwargs)
+
+class ProductImage(models.Model):
+    pass

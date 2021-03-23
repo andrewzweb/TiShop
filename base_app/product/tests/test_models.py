@@ -6,6 +6,8 @@ from django.utils.text import slugify
 from mixer.backend.django import mixer
 pytestmark = pytest.mark.django_db
 
+from ..models import ProductImage
+
 class TestProduct:
     ''' test product '''
 
@@ -59,3 +61,12 @@ class TestProduct:
         '''test product str return title'''
         product = mixer.blend('product.Product')
         assert product.title in str(product)
+
+
+class TestProductImage:
+
+    def setup(self):
+        self.product_image = mixer.blend('product.ProductImage')
+    
+    def test_exist_product_image(self):
+        assert ProductImage.objects.count() == 1
