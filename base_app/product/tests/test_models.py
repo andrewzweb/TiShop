@@ -75,3 +75,6 @@ class TestProductImage:
 
     def test_obj_have_description(self):
         assert self.product_image.description
+
+    def test_obj_have_image(self):
+        assert self.product_image.image

@@ -26,5 +26,8 @@ class Product(models.Model):
         self.slug = slugify(self.title)
         super(Product, self).save(*args, **kwargs)
 
+
 class ProductImage(models.Model):
+    ''' product image '''
     description = models.CharField(blank=True, max_length=100)
+    image = models.ImageField()
