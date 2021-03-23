@@ -64,9 +64,14 @@ class TestProduct:
 
 
 class TestProductImage:
+    ''' test product image '''
 
     def setup(self):
+        ''' setup '''
         self.product_image = mixer.blend('product.ProductImage')
     
     def test_exist_product_image(self):
         assert ProductImage.objects.count() == 1
+
+    def test_obj_have_description(self):
+        assert self.product_image.description

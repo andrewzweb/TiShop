@@ -27,4 +27,4 @@ class Product(models.Model):
         super(Product, self).save(*args, **kwargs)
 
 class ProductImage(models.Model):
-    pass
+    description = models.CharField(blank=True, max_length=100)
