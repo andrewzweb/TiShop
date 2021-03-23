@@ -68,8 +68,9 @@ class TestProductImage:
 
     def setup(self):
         ''' setup '''
-        self.product_image = mixer.blend('product.ProductImage')
-    
+        self.product = mixer.blend('product.Product')
+        self.product_image = mixer.blend('product.ProductImage', product=self.product)
+
     def test_exist_product_image(self):
         assert ProductImage.objects.count() == 1
 
@@ -78,3 +79,6 @@ class TestProductImage:
 
     def test_obj_have_image(self):
         assert self.product_image.image
+
+    def test_obj_have_ralation_with_product(self):
+        assert self.product_image.product == self.product

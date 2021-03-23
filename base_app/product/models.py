@@ -31,3 +31,9 @@ class ProductImage(models.Model):
     ''' product image '''
     description = models.CharField(blank=True, max_length=100)
     image = models.ImageField()
+    product = models.ForeignKey(
+        'Product',
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
