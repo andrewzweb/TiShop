@@ -37,3 +37,6 @@ class ProductImage(models.Model):
         blank=True,
         null=True,
     )
+
+    def __str__(self):
+        return '{}'.format(self.description)

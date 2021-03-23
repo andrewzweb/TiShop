@@ -82,3 +82,6 @@ class TestProductImage:
 
     def test_obj_have_ralation_with_product(self):
         assert self.product_image.product == self.product
+
+    def test_obj_str_return_title(self):
+        assert str(self.product_image) == self.product_image.description
