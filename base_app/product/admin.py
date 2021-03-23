@@ -6,11 +6,15 @@ from . import models
 
 class ProductImagesInstanceInline(admin.TabularInline):
     model = models.ProductImage
+    fields = ('small_image', 'description', 'image')
+    readonly_fields = ('small_image',)
+    extra = 1
 
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
     ''' product admin '''
+    inlines = (ProductImagesInstanceInline,)
     list_display = (
         'view_name_and_price',
         'title',
@@ -29,4 +33,4 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(models.ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
     ''' product image '''
-    list_display = ('description',)
+    list_display = ('description','small_image')

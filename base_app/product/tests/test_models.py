@@ -85,3 +85,6 @@ class TestProductImage:
 
     def test_obj_str_return_title(self):
         assert str(self.product_image) == self.product_image.description
+
+    def test_obj_small_image(self):
+        assert self.product_image.image.url in  self.product_image.small_image()

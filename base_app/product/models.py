@@ -1,6 +1,7 @@
 ''' product models '''
 
 from django.db import models
+from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 
 
@@ -40,3 +41,9 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return '{}'.format(self.description)
+
+    def small_image(self):
+        return mark_safe(u'<img src="%s" width="100"/>' % self.image.url)
+
+    small_image.short_description = 'Picture'
+    small_image.allow_tags = True
