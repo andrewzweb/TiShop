@@ -1,0 +1,71 @@
+* TODO Deploy with Docker
+  :PROPERTIES:
+  :ID:       f88264c8-ed4e-4fb6-934b-543073b35410
+  :END:
+
+** TODO create Docker file 
+  :PROPERTIES:
+  :CREATED:  [2021-03-24 Wed 20:31]
+  :ID:       83da4f7b-c397-4aa2-8cf1-08efd8f3e1be
+  :END:
+
+Go to work dir 
+
+#+begin_src sh :results silent :session *sh*
+pwd 
+cd ~/workspace/projects/TiShop/
+#+end_src
+
+Build docker container with application.
+
+#+begin_src sh :results output :session *sh*
+docker build -t ti-shop -f deploy/Dockerfile .
+#+end_src
+
+Check what all done and we have image  
+#+begin_src sh :results output :session *sh*
+docker images 
+#+end_src
+
+In top sheet will be our image 
+
+#+RESULTS:
+: REPOSITORY    TAG       IMAGE ID       CREATED             SIZE
+: ti-shop       latest    c2221a2988a7   43 minutes ago      947MB
+: <none>    f954768749dc   About an hour ago   947MB
+: <none>    6c3ef7a8c8bc   About an hour ago   947MB
+: <none>    71c837c476e9   About an hour ago   885MB
+: python        3.8       53da5c105f01   11 days ago         883MB
+: gitea/gitea   latest    811f87c8b1e8   3 months ago        141MB
+: ubuntu        latest    f643c72bc252   3 months ago        72.9MB
+: jenkins       latest    cd14cecfdb3a   2 years ago         696MB
+
+
+** Run Image 
+   :PROPERTIES:
+   :ID:       f1ad497b-31a6-40a8-966a-bf5c714f9d7e
+   :END:
+
+#+begin_src sh :results output :session *sh*
+docker run -p 8000:8000 -d ti-shop
+#+end_src
+
+And we have run container with id 
+
+#+RESULTS:
+: ce09f505f0b748f672ab182957834343a1e80498cd91c6f964621f47f754c25e
+
+Check secondary 
+
+#+begin_src sh :results output :session *sh*
+docker ps -a
+#+end_src
+
+#+RESULTS:
+: CONTAINER ID   IMAGE     COMMAND                  CREATED              STATUS              PORTS                    NAMES
+: 8000/tcp   thirsty_perlman
+
+
+
+
+
