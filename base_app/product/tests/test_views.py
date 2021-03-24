@@ -62,5 +62,4 @@ class TestProductDetailView:
         product = random.choice(self.products)
         resp = views.product_detail(self.req, product_slug=product.slug)
         assert product.title in str(resp.content)
-        assert product.slug in str(resp.content)
         assert str(product.price) in str(resp.content)

@@ -1,0 +1,14 @@
+{% for product in products %}
+<div class="card product-item col-md-6 col-xl-3">
+  {% for img in product.productimage_set.all|slice:"1" %}
+  <img class="card-img-top" src="{{ img.image.url }}" alt="Card {{ product.name }}">
+  {% endfor %}
+  <div class="card-body">
+    <h5 class="card-title prodcut-title text-center">{{ product.title }}</h5>
+    <div class="product-price">Price: {{ product.price }}$</div>
+    <p class="card-text product-description text-muted">{{ product.description|truncatewords:10 }}</p>
+    <a class="btn btn-info text-center" href="{% url 'product:detail' product.slug %}">see more</a>
+    <a class="btn btn-primary text-center" href="{% url 'product:detail' product.slug %}">add to cart</a>
+  </div>
+</div>
+{% endfor %}
