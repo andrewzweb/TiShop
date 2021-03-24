@@ -1,0 +1,24 @@
+{% extends 'product/base.html' %}
+{% load static %}
+
+{% block content %}
+<div id="product">
+  {% if products %}
+  {% for product in products%}
+  <div class="product-item">
+    {% for img in product.productimage_set.all|slice:"1" %}
+    <img class="card-img-top" src="{{ img.image.url }}" alt="Card {{ product.name }}">
+    {% endfor %}
+    <div class="prodcut-title">{{ product.title }}</div>
+    <div class="product-price">{{ product.price }}</div>
+    <div class="product-category">{{ product.category }}</div>
+    <div class="product-description">{{ product.description }}</div>
+    <a href="{% url 'product:detail' product.slug %}">see more</a>
+  </div>
+  {% endfor %}
+  {% else %}
+  <h2>Shop hav't product yet..</h2>
+  {% endif %}
+</div>
+{% endblock %}
+
