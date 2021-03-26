@@ -6,5 +6,6 @@ class HomePageTest(FunctionalTest):
     """ test new user """
 
     def test_get_home_page(self):
-        self.browser.get(self.live_server_url)
+        self.browser.get(
+            self.live_server_url + reverse('product:home'))
         assert 'Home' in self.browser.title
