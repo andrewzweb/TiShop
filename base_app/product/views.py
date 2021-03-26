@@ -1,4 +1,5 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 
 from .models import Product, Category
 
@@ -19,6 +20,15 @@ def product_detail(request, product_slug):
     product = get_object_or_404(Product, slug=product_slug)
     return render(request, 'product/detail.html', locals())
 
+def product_delete(request, product_slug):
+    if request.method == 'POST':
+        product = get_object_or_404(Product, slug=product_slug)
+        product.delete()
+        return redirect(reverse('product:all'))
+    else:
+        product = get_object_or_404(Product, slug=product_slug)
+        return render(request, 'product/delete.html', locals())
+        
 def category_filter(request, category_slug):
     '''product detail '''
     categories = Category.objects.all()
