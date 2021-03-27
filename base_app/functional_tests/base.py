@@ -5,17 +5,19 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 import time
 import os
 
+
 MAX_WAIT = 10
 
 class FunctionalTest(StaticLiveServerTestCase):
     """ test new user """
 
     def setUp(self):
+
         self.browser = webdriver.Firefox()
         staging_server = os.environ.get('STAGING_SERVER')
-        if staging_server: 
+        if staging_server:
             self.live_server_url = 'http://' + staging_server
-        
+
     def tearDown(self):
         self.browser.quit()
 
@@ -26,7 +28,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         def modified_fn(*args,**kwargs):
             start_time = time.time()
             while True:
-                try: 
+                try:
                     return fn(*args,**kwargs)
                 except (AssertionError, WebDriverException) as e:
                     if time.time() - start_time > MAX_WAIT:

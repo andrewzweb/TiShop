@@ -8,8 +8,9 @@ pytestmark = pytest.mark.django_db
 
 
 class ProductDeleteTest(FunctionalTest):
-    """ test new user """
+    """ testcase product delete  """
 
+    @pytest.mark.integration
     def test_delete_product(self):
         ''' Rob want delete product '''
 
