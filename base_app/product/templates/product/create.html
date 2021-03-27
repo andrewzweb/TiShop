@@ -1,0 +1,64 @@
+{% extends 'product/base.html' %}
+{% load static %}
+
+{% block title_page %}
+Create: Product| TiShop
+{% endblock %}
+
+{% block content %}
+<main class="form-data">
+  <div class="product-create container row">
+    <h2 class="col col-md-12 text-center">Add Product</h2>
+    <form class="col-md-6" action="{% url 'product:add' %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <label for="inputProductTitle" class="visually-hidden">Title</label>
+      <input name="product-title" id="inputProductTitle" type="text" class="form-control" placeholder="Title" required autofocus>
+
+      <label for="inputProductDescription" class="visually-hidden">Description</label>
+      <textarea id="inputProductDescription" name="product-description" rows="8" class="form-control" aria-label="With textarea" ></textarea>
+
+      <label for="inputProductPrice" class="visually-hidden">Price</label>
+      <input name="product-price" id="inputProductPrice" type="number" value="0" step="0.01" class="form-control" placeholder="Price">
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="inputProductCategorySelect">Category</label>
+        </div>
+        <select name="product-category" class="custom-select" id="inputProductCategorySelect">
+          <option value selected>Choose...</option>
+          {% for category in  product_form.category|slice:"1:" %}
+          {{ category }}
+          {% endfor %}
+        </select>
+      </div>
+
+      <label for="inputPictureDescription" class="visually-hidden">Picture description</label>
+      <input name="picture-description" id="inputPictureDescription" type="text" class="form-control" placeholder="Description">
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Picture</span>
+        </div>
+        <div class="custom-file">
+          <input id="inputPictureFile" name="picture-image" type="file" class="custom-file-input" ">
+          <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+        </div>
+      </div>      
+
+      <button id="buttonAddProduct" class="btn btn-primary" type="submit" >Add Product</button>
+    </form>
+  </div>
+</main>
+{% endblock %}
+
+{% block script %}
+<script>
+ $('#inputPictureFile').on('change',function(){
+   //get the file name
+   var fileName = $(this).val();
+   //replace the "Choose a file" label
+   $(this).next('.custom-file-label').html(fileName);
+ })
+</script>
+{% endblock %}

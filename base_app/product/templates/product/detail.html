@@ -35,10 +35,18 @@
   </div>
 
   <div class="product-data col col-md-6  col-xl-6">
-    <h2 class="prodcut-title">{{ product.title }}</h2>
-    <h4 class="product-price">Price: {{ product.price }}$</h4>
-    <p class="product-description">Description: {{ product.description }}</p>
+    <h2 id="product-title" class="prodcut-title">{{ product.title }}</h2>
+    <h4 id="product-price" class="product-price">Price: {{ product.price }}$</h4>
+    <p id="product-description" class="product-description">Description: {{ product.description }}</p>
   </div>
 
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+ $('.carousel').carousel({
+   interval: 2000
+ })
+</script>
 {% endblock %}

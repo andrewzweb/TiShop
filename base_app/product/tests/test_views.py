@@ -1,11 +1,14 @@
 ''' test views '''
 
+from faker import Faker
 import random
 import pytest
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from django.test import RequestFactory
 from mixer.backend.django import mixer
 pytestmark = pytest.mark.django_db
+faker = Faker()
 
 from .. import views
 from .. import models
@@ -93,3 +96,41 @@ class TestProductDeleteView:
         resp = views.product_delete(req, product_slug=product.slug)
         assert resp.status_code == 302
         assert models.Product.objects.count() == 4
+
+
+class TestProductCreateView:
+    ''' test product create view'''
+
+    def setup(self):
+        ''' set up '''
+        self.req = RequestFactory()
+
+    def test_create_product_view_return_page(self):
+        ''' test create product view return page '''
+        req = self.req.get(reverse('product:add'))
+        resp = views.product_add(req)
+        assert resp.status_code == 200
+
+        
+    def test_create_product_view_send_post_request(self):
+        ''' test view show all product '''
+
+        small_gif = (
+            b'\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x00\x00\x00\x21\xf9\x04'
+            b'\x01\x0a\x00\x01\x00\x2c\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02'
+            b'\x02\x4c\x01\x00\x3b'
+        )
+        image = SimpleUploadedFile('small.gif', small_gif, content_type='image/gif')
+        
+        req = self.req.post(
+            reverse('product:add'),
+            data={
+                'product-title': 'Product Title',
+                'product-description': 'Product Description',
+                'picture-description': 'Picture Description',
+                'picture-image': image,
+            }
+        )
+        resp = views.product_add(req)
+        assert resp.status_code == 302
+        assert models.Product.objects.count() == 1
