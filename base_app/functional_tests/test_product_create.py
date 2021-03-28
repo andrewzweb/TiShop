@@ -56,19 +56,19 @@ class ProductCreateTest(FunctionalTest):
 
         # and then we get page with this product
 
-#        # Rob see product title
-#        created_product_title = self.wait_for(
-#            self.browser.find_element_by_id('product-title').text)
-#
-#        # it's the same product-title
-#        assert created_product_title == product_title
-#
-#        # Rob check prise
-#        created_product_price = self.wait_for(
-#            self.browser.find_element_by_id('product-price').text)
-#        assert product_price in created_product_price
-#
-#        # Rob check description
-#        created_product_description = self.wait_for(
-#            self.browser.find_element_by_id('product-description').text)
-#        assert product_description in created_product_description
+        # Rob see product title
+        created_product_title = self.wait_for(
+            self.browser.find_element_by_id('product-title').text)
+
+        # it's the same product-title
+        assert created_product_title == product_title
+
+        # Rob check prise
+        created_product_price = self.wait_for(
+            self.browser.find_element_by_id('product-price').text)
+        assert product_price in created_product_price
+
+        # Rob check description
+        created_product_description = self.wait_for(
+            self.browser.find_element_by_id('product-description').text)
+        assert product_description in created_product_description
