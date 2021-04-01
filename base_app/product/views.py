@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
+from django.forms import modelformset_factory
 
-from .models import Product, Category
+from .models import Product, ProductImage, Category
 from . import forms
 
 def home(request):
@@ -26,11 +27,11 @@ def product_add(request):
     categories = Category.objects.all()
 
     product_form = forms.ProductForm()
-    picture_form = forms.ProductImagesForm()
+    picture_form = forms.ProductImageForm()
     
     if request.method == "POST":
         product_form = forms.ProductForm(prefix="product", data=request.POST)
-        picture_form = forms.ProductImagesForm(prefix="picture", data=request.POST, files=request.FILES)
+        picture_form = forms.ProductImageForm(prefix="picture", data=request.POST, files=request.FILES)
         if product_form.is_valid() and picture_form.is_valid():
             product = product_form.save()
             picture = picture_form.save(commit=False)
@@ -39,10 +40,54 @@ def product_add(request):
             return redirect(reverse('product:detail', kwargs={'product_slug':product.slug,}), status=201)
         else:
             product_form = forms.ProductForm(prefix="product")
-            picture_form = forms.ProductImagesForm(prefix="picture")
+            picture_form = forms.ProductImageForm(prefix="picture")
         
     return render(request, 'product/create.html', locals())
-    
+
+def product_update(request, product_slug):
+    '''product update '''
+    categories = Category.objects.all()
+    product = get_object_or_404(Product, slug=product_slug)
+    picture_queryset = ProductImage.objects.filter(product=product)
+    picture_formset = modelformset_factory(
+        ProductImage,
+        form=forms.ProductImageForm,
+        extra=1,
+        can_delete=True
+    )
+
+    if request.method == "POST":
+        product_form = forms.ProductForm(prefix="product", data=request.POST, instance=product)
+        picture_formset = picture_formset(request.POST, request.FILES)
+        if product_form.is_valid() and picture_formset.is_valid():
+            product = product_form.save()
+            for form in picture_formset:
+                data = form.cleaned_data
+                data_description = data.get('description')
+                data_image = data.get('image')
+                data_id = data.get('id')
+                data_delete = data.get('DELETE')
+
+                if data_id == None and data_description != None and data_image != None:
+                    ProductImage.objects.create(
+                        description=data_description,
+                        image=data_image,
+                        product=product
+                    )
+
+                if data_delete == True:
+                    print('delete', data_id)
+                    ProductImage.objects.get(description=data_id).delete()
+
+                if data_id != None and data_description != None and data_image != None:
+                    form.save()
+
+            return redirect(reverse('product:update', kwargs={'product_slug':product.slug,}))
+    else:
+        product_form = forms.ProductForm(prefix="product", instance=product)
+        picure_formset = picture_formset(queryset=picture_queryset)
+    return render(request, 'product/update.html', locals())
+
 
 def product_delete(request, product_slug):
     if request.method == 'POST':

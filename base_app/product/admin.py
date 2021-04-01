@@ -6,7 +6,7 @@ from . import models
 
 class ProductImagesInstanceInline(admin.TabularInline):
     model = models.ProductImage
-    fields = ('small_image', 'description', 'image')
+    fields = ('small_image', 'description', 'image', 'product')
     readonly_fields = ('small_image',)
     extra = 1
 
@@ -34,7 +34,7 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(models.ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
     ''' product image '''
-    list_display = ('description','small_image')
+    list_display = ('product', 'description', 'image')
 
 
 @admin.register(models.Category)

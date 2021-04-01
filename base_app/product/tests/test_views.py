@@ -11,7 +11,7 @@ pytestmark = pytest.mark.django_db
 faker = Faker()
 
 from .. import views
-from .. import models
+from ..models import Product, ProductImage, Category
 
 class TestHome:
     ''' test home view '''
@@ -77,7 +77,7 @@ class TestProductDeleteView:
         ''' set up '''
         self.req = RequestFactory()
         self.products = mixer.cycle(5).blend('product.Product')
-        assert models.Product.objects.count() == 5
+        assert Product.objects.count() == 5
 
     def test_get_page_delete_product(self):
         ''' test delete product if method show all product '''
@@ -87,7 +87,7 @@ class TestProductDeleteView:
         assert resp.status_code == 200
         assert product.title in str(resp.content)
         assert 'Delete' in str(resp.content)
-        assert models.Product.objects.count() == 5
+        assert Product.objects.count() == 5
 
     def test_send_post_to_page_delete_and_delete_product(self):
         ''' test view show all product '''
@@ -95,7 +95,7 @@ class TestProductDeleteView:
         req = self.req.post(reverse('product:delete', kwargs={'product_slug':product.slug}))
         resp = views.product_delete(req, product_slug=product.slug)
         assert resp.status_code == 302
-        assert models.Product.objects.count() == 4
+        assert Product.objects.count() == 4
 
 
 class TestProductCreateView:
@@ -111,7 +111,7 @@ class TestProductCreateView:
         resp = views.product_add(req)
         assert resp.status_code == 200
 
-        
+
     def test_create_product_view_send_post_request(self):
         ''' test view show all product '''
 
@@ -121,7 +121,7 @@ class TestProductCreateView:
             b'\x02\x4c\x01\x00\x3b'
         )
         image = SimpleUploadedFile('small.gif', small_gif, content_type='image/gif')
-        
+
         req = self.req.post(
             reverse('product:add'),
             data={
@@ -133,4 +133,79 @@ class TestProductCreateView:
         )
         resp = views.product_add(req)
         assert resp.status_code == 302
-        assert models.Product.objects.count() == 1
+        assert Product.objects.count() == 1
+
+
+class TestProductUpdateView:
+    ''' test product update view'''
+
+    def setup(self):
+        ''' set up '''
+        self.req = RequestFactory()
+        self.product = mixer.blend('product.Product')
+
+        small_gif = (
+            b'\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x00\x00\x00\x21\xf9\x04'
+            b'\x01\x0a\x00\x01\x00\x2c\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02'
+            b'\x02\x4c\x01\x00\x3b'
+        )
+        self.image = SimpleUploadedFile('small.gif', small_gif, content_type='image/gif')
+
+
+    def test_get_page(self):
+        ''' test create product view return page '''
+
+        req = self.req.get(reverse('product:update', kwargs={'product_slug':self.product.slug}))
+        resp = views.product_update(req, self.product.slug)
+        assert resp.status_code == 200
+
+
+    def test_render_form_data(self):
+        '''test render form data'''
+
+        pic1 = ProductImage.objects.create(description='pic1', image=self.image, product=self.product)
+        pic2 = ProductImage.objects.create(description='pic2', image=self.image, product=self.product)
+        pic3 = ProductImage.objects.create(description='pic3', image=self.image, product=self.product)
+        pic4 = ProductImage.objects.create(description='pic4', image=self.image, product=self.product)
+        pic5 = ProductImage.objects.create(description='pic5', image=self.image, product=self.product)
+        pictures = [pic1, pic2, pic3, pic4, pic5]
+        assert ProductImage.objects.count() == 5
+        assert pic1.product == self.product
+
+        req = self.req.get(
+            reverse('product:update', kwargs={'product_slug':self.product.slug}))
+        resp = views.product_update(req, product_slug=self.product.slug)
+        for picture in pictures:
+            assert picture.description in str(resp.content)
+
+
+    def test_update_product_view_send_post_request(self):
+        ''' test view show all product '''
+
+        new_product_title = 'New Product Title'
+        new_product_description = 'Product Description'
+        picture_description = 'Picture Description'
+        picture_image = self.image
+
+        req = self.req.post(
+            reverse('product:update', kwargs={'product_slug':self.product.slug}),
+            data={
+                'product-title': new_product_title,
+                'product-description': new_product_description,
+                'form-TOTAL_FORMS': 1,
+                'form-INITIAL_FORMS': 0,
+                'form-0-id': '',
+                'form-0-description': picture_description,
+                'form-0-image': picture_image,
+                'form-0-DELETE': '',
+            }
+        )
+        
+        resp = views.product_update(req, product_slug=self.product.slug)
+        
+        assert resp.status_code == 302, 'views redirect in succses update'
+        assert Product.objects.count() == 1
+        assert ProductImage.objects.count() == 1
+        assert Product.objects.first().title == new_product_title
+        assert ProductImage.objects.first().description == picture_description
+        assert ProductImage.objects.first().product == Product.objects.first()

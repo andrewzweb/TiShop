@@ -2,6 +2,18 @@
 {% load static %}
 
 {% block content %}
+{% if request.user %}
+<div class="container row">
+  <div class="col col-md-12">
+    <a class="btn btn-primary" type="submit" href="{% url 'product:add' %}">Add</a>
+    <a class="btn btn-success" type="submit" href="{% url 'product:update' product.slug %}">Update</a>
+    <a class="btn btn-danger"  type="submit" href="{% url 'product:delete' product.slug %}">Delete</a>
+  </div>
+</div>
+
+{% endif %}
+
+
 <div class="product-item container row"  style="margin-left:auto; margin-right:auto; padding-top: 1rem;">
 
   <div class="product-slider col col-md-6 col-xl-6">

@@ -9,7 +9,7 @@ class ProductForm(forms.ModelForm):
         fields = ('title', 'description', 'price', 'category')
 
 
-class ProductImagesForm(forms.ModelForm):
+class ProductImageForm(forms.ModelForm):
 
     class Meta:
         model = models.ProductImage

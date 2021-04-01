@@ -1,0 +1,109 @@
+{% extends 'product/base.html' %}
+{% load static %}
+
+{% block title_page %}
+Create: Product| TiShop
+{% endblock %}
+
+{% block content %}
+<main class="form-data">
+  <div class="product-create container row">
+    <h2 class="col col-md-12 text-center">Update product: {{ product.title }}</h2>
+    <form class="col-xs-12 col-md-6" action="{% url 'product:update' product.slug %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <button id="buttonAddProduct" class="btn btn-primary" type="submit" >Update Product</button>
+
+      <!-- begin form product  -->
+      <label for="inputProductTitle" class="visually-hidden">Title</label>
+      <input id="inputProductTitle" class="form-control" name="product-title" type="text" placeholder="Title" value="{{ product_form.title.value }}" required autofocus>
+
+      <label for="inputProductDescription" class="visually-hidden">Description</label>
+      <textarea id="inputProductDescription" class="form-control" name="product-description" rows="8" aria-label="With textarea">
+          {{ product_form.description.value }}
+      </textarea>
+
+      <label for="inputProductPrice" class="visually-hidden">Price</label>
+      <input name="product-price"
+             id="inputProductPrice"
+             type="number"
+             value="{{ product_form.price.value }}"
+             step="0.01"
+             class="form-control"
+             placeholder="Price">
+
+      <br/>
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="inputProductCategorySelect">Category</label>
+        </div>
+        <select name="product-category" class="custom-select" id="inputProductCategorySelect">
+          <option value selected>Choose...</option>
+          {% for category in  product_form.category|slice:"1:" %}
+          {{ category }}
+          {% endfor %}
+        </select>
+      </div>
+      <!-- end form product  -->
+
+      <br/>
+      
+      <!-- picture picture_formset -->
+      {{ picure_formset.management_form }}
+      {% for form in picure_formset %}
+
+      <!-- it's form.id nessesary -->
+      {{ form.id }}
+      
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="inputPictureDescription">Description</label>
+        </div>
+        <div class="">
+          <input id="inputPictureDescription"
+                 class="form-control"
+                 name="form-{{ forloop.counter0 }}-description"
+                 type="text"
+                 value="{{ form.description.value|default_if_none:'' }}" >
+        </div>
+      </div>
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Image</span>
+        </div>
+        <div class="custom-file">
+          <input
+            id="inputPictureFile"
+            class="custom-file-input"
+            name="form-{{ forloop.counter0 }}-image"
+            type="file" >
+          <label class="custom-file-label" for="inputGroupFile01">{{ form.image.value|default_if_none:'' }}</label>
+        </div>
+      </div>
+
+      {% if picture_formset.can_delete %}
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <div class="input-group-text">
+            {{ form.DELETE }}
+          </div>
+        </div>
+        <input type="text" class="form-control" aria-label="Text input with checkbox" placeholder="Delete Picture">
+      </div>
+      {% endif %}
+
+      <br/>
+      {% endfor %}
+      <!-- end picture picture_formset -->
+
+    </form>
+  </div>
+</main>
+{% endblock %}
+
+
+{% block comment %}
+
+{% endblock %}
