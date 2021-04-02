@@ -12,7 +12,7 @@ Create: Product| TiShop
     <form class="col-xs-12 col-md-6" action="{% url 'product:update' product.slug %}" method="POST" enctype="multipart/form-data">
       {% csrf_token %}
 
-      <button id="buttonAddProduct" class="btn btn-primary" type="submit" >Update Product</button>
+      <button id="buttonUpdateProduct" class="btn btn-primary" type="submit" >Update Product</button>
 
       <!-- begin form product  -->
       <label for="inputProductTitle" class="visually-hidden">Title</label>
@@ -53,7 +53,7 @@ Create: Product| TiShop
       {{ picure_formset.management_form }}
       {% for form in picure_formset %}
 
-      <!-- it's form.id nessesary -->
+      <!-- it's form.id nessesary and this input autohide -->
       {{ form.id }}
       
       <div class="input-group mb-3">
@@ -61,8 +61,8 @@ Create: Product| TiShop
           <label class="input-group-text" for="inputPictureDescription">Description</label>
         </div>
         <div class="">
-          <input id="inputPictureDescription"
-                 class="form-control"
+          <input id="inputPictureDescription-{{ forloop.counter0 }}"
+                 class="form-control picture-description"
                  name="form-{{ forloop.counter0 }}-description"
                  type="text"
                  value="{{ form.description.value|default_if_none:'' }}" >
@@ -75,8 +75,8 @@ Create: Product| TiShop
         </div>
         <div class="custom-file">
           <input
-            id="inputPictureFile"
-            class="custom-file-input"
+            id="inputPictureFile-{{ forloop.counter0 }}"
+            class="custom-file-input  picture-file"
             name="form-{{ forloop.counter0 }}-image"
             type="file" >
           <label class="custom-file-label" for="inputGroupFile01">{{ form.image.value|default_if_none:'' }}</label>
